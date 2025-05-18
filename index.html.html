@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Portofolio Tia Hidayah</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Arial, sans-serif; background: pink; color: #333; }
+    .landing {
+      height: 100vh; background: #d6336c; display: flex;
+      align-items: center; justify-content: center; position: relative;
+      overflow: hidden; flex-direction: column; padding: 20px;
+    }
+    .landing img {
+      max-width: 90%; max-height: 60%; object-fit: cover;
+      border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      margin-bottom: 20px;
+    }
+    .landing input, .landing select {
+      padding: 10px; margin: 10px 0; border: none;
+      border-radius: 5px; width: 100%; max-width: 300px;
+    }
+    .landing button {
+      background-color: #fff; color: #d6336c; font-weight: bold;
+      border: 2px solid #fff; padding: 10px 20px;
+      border-radius: 8px; cursor: pointer; font-size: 1rem;
+      transition: all 0.3s;
+    }
+    .landing button:hover {
+      background-color: #d6336c; color: #fff; border-color: #fff;
+    }
+    header, nav, section, footer { display: none; }
+    header { background-color: #d6336c; color: white; padding: 20px; text-align: center; }
+    nav { background-color: #b0225a; padding: 15px; text-align: center; }
+    .nav-button {
+      display: inline-block; background: #e83e8c; color: white; border: 2px solid #fff;
+      border-radius: 8px; padding: 10px 20px; margin: 5px;
+      font-weight: bold; cursor: pointer; transition: background .3s;
+    }
+    .nav-button:hover { background: #fff; color: #e83e8c; }
+    section {
+      max-width: 800px; margin: 20px auto; background: white;
+      padding: 20px; box-shadow: 0 0 5px #ccc; border-radius: 8px;
+      display: none;
+    }
+    section.active { display: block; }
+    h2 { color: #d6336c; margin-top: 0; }
+    .favorites ul { list-style: none; padding-left: 0; }
+    .favorites li { margin: 10px 0; }
+    .favorites .sub-list { display: none; margin-left: 20px; list-style: circle; }
+    .favorites .open > .sub-list { display: block; }
+    .favorites span.toggle {
+      cursor: pointer; padding: 5px 10px; border: 1px solid #d6336c;
+      border-radius: 5px; background: #f8d7da; display: inline-block;
+    }
+    .favorites span.toggle:hover { background: #f1b0c4; }
+    #feedback form { display: flex; flex-direction: column; }
+    #feedback label { margin: 10px 0 5px; }
+    #feedback select, #feedback textarea, #feedback button {
+      padding: 8px; border-radius: 4px; border: 1px solid #ccc;
+    }
+    #feedback button {
+      background: #d6336c; color: #fff; border: none;
+      cursor: pointer; margin-top: 10px;
+    }
+    footer {
+      background-color: #d6336c; color: white;
+      padding: 15px; text-align: center; margin-top: 30px;
+      border-radius: 0 0 8px 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Landing Page: Enter site -->
+  <div id="landing" class="landing">
+    <!-- Bagian foto dihapus -->
+    <input type="text" id="visitorName" placeholder="Siapa nama Anda?" required />
+    <select id="visitorRelation">
+      <option value="">Pilih hubungan Anda dengan Tia</option>
+      <option value="Dosen">Dosen</option>
+      <option value="Guru">Guru</option>
+      <option value="Teman">Teman</option>
+      <option value="Pacar">Pacar</option>
+      <option value="Lainnya">Lainnya</option>
+    </select>
+    <button id="enterButton">Masuk ke Website</button>
+  </div>
+
+  <header id="mainHeader">
+    <h1>Portofolio Tia Hidayah</h1>
+    <p id="greeting">Selamat datang!</p>
+  </header>
+  <nav id="navbar">
+    <span class="nav-button" data-target="about">Tentang Saya</span>
+    <span class="nav-button" data-target="status">Status</span>
+    <span class="nav-button" data-target="hobby">Hobi</span>
+    <span class="nav-button" data-target="experience">Pengalaman</span>
+    <span class="nav-button" data-target="favorites">Hal-hal Favorit</span>
+    <span class="nav-button" data-target="contact">Kontak</span>
+    <span class="nav-button" data-target="feedback">Komentar</span>
+  </nav>
+
+  <section id="about">
+    <h2>Tentang Saya</h2>
+    <p>Halo! Saya Tia Hidayah, mahasiswa Prodi Bisnis Digital di Universitas Negeri Medan. Saya tertarik dalam pengembangan web, digital marketing, dan desain grafis.</p>
+  </section>
+  <section id="status">
+    <h2>Status</h2>
+    <p>Saat ini saya sedang menempuh pendidikan semester 4 dan aktif mengikuti organisasi kampus.</p>
+  </section>
+  <section id="hobby">
+    <h2>Hobi</h2>
+    <p>Saya suka mendengar musik pop, membuat desain, dan belajar teknologi baru terutama di bidang digital.</p>
+  </section>
+  <section id="experience">
+    <h2>Pengalaman</h2>
+    <ul>
+      <li>Bekerja di salah satu kursus Bahasa Inggris sebagai guru profesional.</li>
+      <li>Sebagai mentor Public Speaking.</li>
+      <li>Mahasiswa berprestasi di bidang kewirausahaan dan Design Grafis.</li>
+    </ul>
+  </section>
+  <section id="favorites" class="favorites">
+    <h2>Hal-hal Favorit</h2>
+    <ul>
+      <li class="fav-item"><span class="toggle">Orang Favorit</span>
+        <ul class="sub-list"><li>Heriadi</li></ul>
+      </li>
+      <li class="fav-item"><span class="toggle">Makanan Favorit</span>
+        <ul class="sub-list"><li>Donat</li><li>Risol</li><li>Salad</li></ul>
+      </li>
+      <li class="fav-item"><span class="toggle">Minuman Favorit</span>
+        <ul class="sub-list"><li>Cappucino</li><li>Jus Jeruk</li><li>Jus Alpukat</li></ul>
+      </li>
+      <li class="fav-item"><span class="toggle">Film Favorit</span>
+        <ul class="sub-list"><li>Harry Potter</li><li>Avenger</li><li>Spider Man</li></ul>
+      </li>
+      <li class="fav-item"><span class="toggle">Sahabat Sejati</span>
+        <ul class="sub-list"><li>Tasya</li></ul>
+      </li>
+    </ul>
+  </section>
+  <section id="contact">
+    <h2>Kontak</h2>
+    <p>Email: tyahidayah78@gmail.com</p>
+    <p>Telepon: +62 853 5996 5646</p>
+  </section>
+
+  <!-- Feedback -->
+  <section id="feedback">
+    <h2>Komentar</h2>
+    <form id="feedbackForm">
+      <label for="relation">Apa hubungan Anda dengan Tia?</label>
+      <select id="relation" required>
+        <option value="">Pilih hubungan Anda</option>
+        <option value="Dosen">Dosen</option>
+        <option value="Guru">Guru</option>
+        <option value="Teman">Teman</option>
+        <option value="Pacar">Pacar</option>
+        <option value="Lainnya">Lainnya</option>
+      </select>
+      <label for="comment">Tambahkan komentar:</label>
+      <textarea id="comment" rows="3" placeholder="Komentar..."></textarea>
+      <button type="submit">Kirim</button>
+    </form>
+  </section>
+
+  <footer id="mainFooter">
+    <p>© 2025 Tia Hidayah. Semua Hak Dilindungi.</p>
+  </footer>
+
+  <script>
+    document.getElementById('enterButton').addEventListener('click', () => {
+      const name = document.getElementById('visitorName').value.trim();
+      const relation = document.getElementById('visitorRelation').value;
+      if (!name || !relation) {
+        alert("Mohon isi nama Anda dan pilih hubungan dengan Tia.");
+        return;
+      }
+      document.getElementById('landing').style.display = 'none';
+      ['mainHeader','navbar','about','mainFooter','feedback','status','hobby','experience','favorites','contact'].forEach(id => {
+        const el = document.getElementById(id);
+        el.style.display = id==='mainHeader'||id==='navbar'||id==='mainFooter' ? 'block' : 'none';
+        el.classList.remove('active');
+      });
+      document.getElementById('about').style.display = 'block';
+      document.getElementById('about').classList.add('active');
+      document.getElementById('greeting').textContent = `Halo ${name} (${relation}), selamat datang!`;
+    });
+
+    document.querySelectorAll('.nav-button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('section').forEach(sec => {
+          sec.classList.remove('active');
+          sec.style.display = 'none';
+        });
+        const targetSection = document.getElementById(btn.getAttribute('data-target'));
+        targetSection.classList.add('active');
+        targetSection.style.display = 'block';
+      });
+    });
+
+    document.querySelectorAll('.fav-item .toggle').forEach(toggle => {
+      toggle.addEventListener('click', () => {
+        toggle.parentElement.classList.toggle('open');
+      });
+    });
+
+    document.getElementById('feedbackForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const rel = document.getElementById('relation').value;
+      const comment = document.getElementById('comment').value;
+      if (!rel || !comment.trim()) {
+        alert('Mohon isi semua kolom.');
+        return;
+      }
+      console.log(`Hubungan: ${rel}, Komentar: ${comment}`);
+      alert('Terima kasih atas feedback Anda!');
+      document.getElementById('feedbackForm').reset();
+    });
+  </script>
+</body>
+</html>
