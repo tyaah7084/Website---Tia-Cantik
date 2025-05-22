@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TyaPuccino by Tia Hidayah</title>
+  <style>
+    /* Reset & dasar */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      position: relative;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #ffe6f0;
+      color: #4a2c44;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 10px 50px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    /* Toggle switch dark mode */
+    .dark-mode-toggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: bold;
+      color: #d63384;
+      user-select: none;
+    }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 26px;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: 0.4s;
+      border-radius: 34px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: #d63384;
+    }
+    input:checked + .slider:before {
+      transform: translateX(24px);
+    }
+
+    /* Dark mode styles */
+    body.dark-mode {
+      background-color: #1e1e1e;
+      color: #f3e5f5;
+    }
+    body.dark-mode h1.title    { color: #ff90c2; text-shadow: 2px 2px 5px #3a2a3f; }
+    body.dark-mode h2.section-title { color: #ffc0cb; text-shadow: 1px 1px 3px #5b355a; }
+    body.dark-mode p.subtitle  { color: #e8bada; }
+    body.dark-mode .nav-buttons button {
+      background-color: #ff79c6; color: #222;
+      box-shadow: 0 4px 10px rgba(255,121,198,0.5);
+    }
+    body.dark-mode .nav-buttons button:hover {
+      background-color: #e066ac;
+    }
+    body.dark-mode .card      { background-color: #2e2e2e; box-shadow: 0 6px 12px rgba(255,192,203,0.2); }
+    body.dark-mode .card-content { color: #ffc0cb; }
+    body.dark-mode .card-content p { color: #e8bada; }
+    body.dark-mode form,
+    body.dark-mode #receipt,
+    body.dark-mode #history-list li,
+    body.dark-mode .container  {
+      background-color: #2b2b2b; color: #f3e5f5;
+      box-shadow: 0 8px 20px rgba(255,192,203,0.1);
+    }
+    body.dark-mode input,
+    body.dark-mode select     { background-color: #1c1c1c; color: #fff; border-color: #ff69b4; }
+    body.dark-mode label,
+    body.dark-mode .radio-label { color: #e0a9d4; }
+    body.dark-mode button.btn-primary {
+      background-color: #ff69b4; color: #1c1c1c;
+      box-shadow: 0 6px 15px rgba(255,121,198,0.4);
+    }
+    body.dark-mode button.btn-primary:hover {
+      background-color: #ff1493; color: white;
+    }
+    body.dark-mode #no-orders   { color: #ffc0cb; }
+
+    /* Judul utama aesthetic cursive */
+    h1.title {
+      font-family: 'Dancing Script', cursive, serif;
+      font-size: 4rem; font-weight: 700;
+      color: #d63384; margin-bottom: 10px;
+      letter-spacing: 4px; text-align: center;
+      font-style: italic; user-select: none;
+      text-shadow: 2px 2px 5px #fcd7e3;
+    }
+    h2.section-title {
+      color: #b82f6b; font-size: 2rem;
+      margin-bottom: 20px; text-align: center;
+      font-weight: 700; text-shadow: 1px 1px 3px #f9cde8;
+    }
+    p.subtitle {
+      text-align: center; font-size: 1.3rem;
+      margin-bottom: 25px; color: #802355;
+      font-style: italic; letter-spacing: 0.8px;
+      user-select: none;
+    }
+
+    /* Navigation buttons */
+    .nav-buttons {
+      margin-bottom: 40px;
+      display: flex; gap: 18px;
+      justify-content: center; flex-wrap: wrap;
+    }
+    .nav-buttons button {
+      background-color: #d63384; color: white;
+      border: none; padding: 12px 24px;
+      font-weight: 700; font-size: 1rem;
+      border-radius: 25px; cursor: pointer;
+      box-shadow: 0 4px 10px rgba(214, 51, 132, 0.5);
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+    .nav-buttons button:hover {
+      background-color: #a9245e; transform: scale(1.05);
+    }
+
+    /* Container untuk isi section */
+    .container {
+      max-width: 900px; width: 100%;
+      padding: 0 20px; transition: background-color 0.3s, color 0.3s;
+    }
+
+    /* Section */
+    section {
+      display: none; animation: fadeInUp 0.7s ease forwards;
+    }
+    section.active { display: block; }
+
+    /* Promo grid */
+    .grid {
+      display: flex; gap: 20px;
+      flex-wrap: wrap; justify-content: center;
+    }
+    .card {
+      background-color: white; border-radius: 15px;
+      box-shadow: 0 6px 12px rgba(214, 51, 132, 0.15);
+      overflow: hidden; width: 280px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 10px 25px rgba(214, 51, 132, 0.3);
+    }
+    .card img {
+      width: 100%; height: 180px; object-fit: cover;
+    }
+    .card-content {
+      padding: 15px 20px; color: #802355;
+    }
+    .card-content h3 {
+      font-weight: 700; font-size: 1.25rem;
+      margin-bottom: 8px;
+    }
+    .card-content p {
+      font-size: 1rem; color: #b53f7d;
+    }
+
+    /* Form style */
+    form {
+      background: white; padding: 30px 30px 35px;
+      border-radius: 18px;
+      box-shadow: 0 8px 20px rgba(214, 51, 132, 0.2);
+      max-width: 450px; margin: auto;
+    }
+    .form-group { margin-bottom: 20px; }
+    label {
+      font-weight: 700; color: #7f2f5e;
+      display: block; margin-bottom: 7px;
+      font-size: 1.05rem;
+    }
+    input[type="text"],
+    input[type="number"],
+    select {
+      width: 100%; padding: 12px 15px;
+      border-radius: 12px; border: 2px solid #d63384;
+      font-size: 1rem; transition: border-color 0.3s ease;
+    }
+    input:focus, select:focus {
+      border-color: #a9245e; outline: none;
+    }
+    input[type="radio"] {
+      margin-right: 8px; cursor: pointer;
+    }
+    .radio-label {
+      font-size: 1rem; color: #7f2f5e;
+      user-select: none; cursor: pointer;
+    }
+
+    /* QRIS code */
+    #qris-code {
+      margin-top: 15px; text-align: center;
+      display: none;
+    }
+    #qris-code img {
+      width: 150px; border-radius: 15px;
+      box-shadow: 0 4px 14px rgba(214, 51, 132, 0.25);
+      user-select: none;
+    }
+
+    /* Submit button */
+    button.btn-primary {
+      width: 100%; background-color: #d63384;
+      color: white; border: none;
+      font-weight: 700; font-size: 1.1rem;
+      padding: 15px; border-radius: 25px;
+      cursor: pointer;
+      box-shadow: 0 6px 15px rgba(214, 51, 132, 0.4);
+      transition: background-color 0.3s ease;
+    }
+    button.btn-primary:hover {
+      background-color: #a9245e;
+    }
+
+    /* Riwayat pesanan list */
+    #history-list {
+      list-style: none; padding: 0;
+      max-width: 600px; margin: auto;
+    }
+    #history-list li {
+      background-color: #fff0f5; border-radius: 14px;
+      padding: 14px 20px; margin-bottom: 14px;
+      font-weight: 600; color: #782a59;
+      box-shadow: 0 4px 12px rgba(214, 51, 132, 0.15);
+      opacity: 0; animation: fadeIn 0.8s forwards;
+    }
+
+    /* Struk pembelian */
+    #receipt {
+      max-width: 600px; background: #fff0f5;
+      border-radius: 20px; padding: 25px 30px;
+      margin: 30px auto 50px;
+      box-shadow: 0 8px 22px rgba(214, 51, 132, 0.25);
+      display: none; text-align: center;
+    }
+    #receipt-content p {
+      font-size: 1.1rem; color: #6b2351;
+      margin-bottom: 12px; font-weight: 600;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn { to { opacity: 1; } }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .grid { flex-direction: column; align-items: center; }
+      .card { width: 90%; }
+      form { width: 90%; padding: 20px 20px 25px; }
+      #receipt { width: 90%; padding: 20px 15px; }
+    }
+  </style>
+
+  <!-- Link font cursive dari Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap"
+    rel="stylesheet"
+  />
+</head>
+<body>
+
+  <div class="dark-mode-toggle">
+    🌞
+    <label class="switch">
+      <input type="checkbox" id="darkModeSwitch" />
+      <span class="slider"></span>
+    </label>
+    🌙
+  </div>
+
+  <h1 class="title">TyaPuccino</h1>
+  <p class="subtitle">by Tia Hidayah — Nikmati Cappuccino Hangat dengan Sentuhan Cinta</p>
+
+  <div class="nav-buttons">
+    <button onclick="showSection('promo')">Promo Spesial</button>
+    <button onclick="showSection('checkout')">Order Now!</button>
+    <button onclick="showSection('order-history')">Riwayat Pesanan</button>
+    <button onclick="showSection('owner')">Owner</button>
+    <button onclick="showSection('contact')">Contact Us</button>
+    <button onclick="showSection('reviews')">Review Pelanggan Setia</button>
+  </div>
+
+  <!-- Promo Section -->
+  <section id="promo" class="active">
+    <div class="container">
+      <h2 class="section-title">Promo Cappuccino Spesial</h2>
+      <div class="grid">
+        <div class="card" tabindex="0" aria-label="Cappuccino Classic, harga 20 ribu rupiah">
+          <img src="C:\Users\ACER\Downloads\TyaPuccino.Html/Cappucino Froth.jpg">
+          <div class="card-content">
+            <h3>Cappuccino Classic</h3>
+            <p>Aroma klasik dengan cita rasa seimbang.</p>
+            <p><strong>Harga: Rp 20.000</strong></p>
+          </div>
+        </div>
+        <div class="card" tabindex="0" aria-label="Cappuccino Froth, harga 25 ribu rupiah">
+          <img src="C:\Users\ACER\Downloads\TyaPuccino.Html/Cappucino Classic.jpeg">
+          <div class="card-content">
+            <h3>Cappuccino Froth</h3>
+            <p>Foam lembut menggoda lidah.</p>
+            <p><strong>Harga: Rp 25.000</strong></p>
+          </div>
+        </div>
+        <div class="card" tabindex="0" aria-label="Cappuccino Caramel, harga 28 ribu rupiah">
+          <img src="C:\Users\ACER\Downloads\TyaPuccino.Html/Capucino Caramel.jpg">
+          <div class="card-content">
+            <h3>Cappuccino Caramel</h3>
+            <p>Sentuhan manis caramel yang lezat.</p>
+            <p><strong>Harga: Rp 28.000</strong></p>
+          </div>
+        </div>
+        <div class="card" tabindex="0" aria-label="Cappuccino Frappe, harga 30 ribu rupiah">
+          <img src="C:\Users\ACER\Downloads\TyaPuccino.Html/Cappucino Frappe.jpg">
+          <div class="card-content">
+            <h3>Cappuccino Frappe</h3>
+            <p>Kopi robusta berkualitas dengan susu segar dan Frappe lembut.</p>
+            <p><strong>Harga: Rp 30.000</strong></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Owner Section -->
+  <section id="owner">
+    <div class="container">
+      <h2 class="section-title">Owner Kami</h2>
+      <div class="grid">
+        <div class="card" tabindex="0" aria-label="Foto Owner TyaPuccino">
+          <img src="C:\Users\ACER\Downloads\TyaPuccino.Html/foto tia cantik.jpeg" alt="Foto Owner TyaPuccino">
+          <div class="card-content">
+            <h3>Tia Hidayah</h3>
+            <p>Founder dan pemilik TyaPuccino, penggemar kopi dengan misi menyajikan kehangatan dan cinta dalam setiap cangkir.</p>
+			<p>-</p>
+			<p>Nama : Tia Hidayah</p>
+			<p>Prodi Bisnis Digital</p>
+			<p>Fakultas Ekonomi</p>
+			<p>Universitas Negeri Medan</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact">
+    <div class="container">
+      <h2 class="section-title">Contact Us</h2>
+      <p style="text-align:center; margin-top:20px;">Untuk pertanyaan dan kerjasama, hubungi kami di:<br/>
+      <strong>email : tyahidayah78@gmail.com</strong> atau <strong>0853-5996-5646</strong></p>
+    </div>
+  </section>
+
+  <!-- Review Pelanggan Setia Section -->
+  <section id="reviews">
+    <div class="container">
+      <h2 class="section-title">Review Pelanggan Setia</h2>
+      <p style="margin-top:20px; text-align:center;">“Cappucino di TyaPuccino selalu menjaga kualitas dan rasa." </p>
+	  
+      <h2 class="section-title">      Heriadi❤️ </h2>
+    </div>
+  </section>
+
+  <!-- Checkout Section -->
+  <section id="checkout">
+    <div class="container">
+      <h2 class="section-title">Checkout Pesanan</h2>
+      <form id="orderForm" onsubmit="return processOrder(event)" aria-label="Formulir pemesanan cappuccino">
+        <div class="form-group">
+          <label for="name">Nama Anda:</label>
+          <input type="text" id="name" name="name" placeholder="Masukkan nama lengkap" required />
+        </div>
+        <div class="form-group">
+          <label for="variant">Pilih Varian:</label>
+          <select id="variant" name="variant" required>
+            <option value="Cappuccino Classic">Cappuccino Classic - Rp 20.000</option>
+            <option value="Cappuccino Froth">Cappuccino Froth - Rp 25.000</option>
+            <option value="Cappuccino Caramel">Cappuccino Caramel - Rp 28.000</option>
+            <option value="Cappuccino Frappe">Cappuccino Frappe - Rp 30.000</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="quantity">Jumlah:</label>
+          <input type="number" id="quantity" name="quantity" min="1" placeholder="Masukkan jumlah pesanan" required />
+        </div>
+        <div class="form-group" role="radiogroup" aria-labelledby="payment-method-label">
+          <label id="payment-method-label" class="radio-label">Metode Pembayaran:</label>
+          <label class="radio-label"><input type="radio" name="payment" value="virtual account" required /> Virtual Account</label>
+          <label class="radio-label"><input type="radio" name="payment" value="qris" /> QRIS</label>
+        </div>
+        <div id="qris-code" aria-live="polite" aria-hidden="true">
+          <p>Scan QRIS untuk pembayaran:</p>
+          <img src="C:\Users\ACER\Downloads\TyaPuccino.Html/Qris method.jpeg" alt="Kode QR Pembayaran QRIS" />
+        </div>
+        <button type="submit" class="btn-primary">Proses Pesanan</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Riwayat Pesanan Section -->
+  <section id="order-history" aria-live="polite">
+    <div class="container">
+      <h2 class="section-title">Riwayat Pesanan</h2>
+      <ul id="history-list" role="list" aria-label="Daftar riwayat pesanan"></ul>
+      <p id="no-orders" style="text-align:center; color:#b94e7e; font-weight:bold; margin-top:20px;">
+        Belum ada pesanan
+      </p>
+    </div>
+  </section>
+
+  <!-- Struk Pembelian -->
+  <section id="receipt" role="region" aria-label="Struk pembelian">
+    <div class="container">
+      <h2 class="section-title">Struk Pembelian</h2>
+      <div id="receipt-content" style="color:#6b2351; font-weight:600;"></div>
+      <button onclick="printPDF()" class="btn-primary">Simpan ke PDF</button>
+    </div>
+  </section>
+
+  <!-- Script -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script>
+    // Dark mode switch
+    const toggle = document.getElementById('darkModeSwitch');
+    toggle.addEventListener('change', function () {
+      document.body.classList.toggle('dark-mode', this.checked);
+    });
+
+    // Data pesanan
+    let orders = [];
+
+    // Tampilkan section sesuai id
+    function showSection(id) {
+      document.querySelectorAll('section').forEach(sec => {
+        sec.id === id ? sec.classList.add('active') : sec.classList.remove('active');
+      });
+      if (id !== 'receipt') document.getElementById('receipt').style.display = 'none';
+      toggleNoOrdersText();
+    }
+
+    // Toggle teks "Belum ada pesanan"
+    function toggleNoOrdersText() {
+      document.getElementById('no-orders').style.display =
+        orders.length === 0 ? 'block' : 'none';
+    }
+
+    // QRIS display
+    document.querySelectorAll('input[name="payment"]').forEach(input => {
+      input.addEventListener('change', e => {
+        const qrisDiv = document.getElementById('qris-code');
+        if (e.target.value === 'qris') {
+          qrisDiv.style.display = 'block';
+          qrisDiv.setAttribute('aria-hidden', 'false');
+        } else {
+          qrisDiv.style.display = 'none';
+          qrisDiv.setAttribute('aria-hidden', 'true');
+        }
+      });
+    });
+
+    // Process order
+    function processOrder(event) {
+      event.preventDefault();
+      const form = event.target;
+      const name = form.name.value.trim();
+      const variant = form.variant.value;
+      const quantity = parseInt(form.quantity.value);
+      const payment = form.payment.value;
+      if (!name || !variant || !quantity || quantity < 1 || !payment) {
+        alert('Mohon isi semua data dengan benar!');
+        return false;
+      }
+      orders.push({ name, variant, quantity, payment });
+      addOrderToHistory(name, variant, quantity, payment);
+      showReceipt(name, variant, quantity, payment);
+      form.reset();
+      document.getElementById('qris-code').style.display = 'none';
+      showSection('order-history');
+      return false;
+    }
+
+    function addOrderToHistory(name, variant, quantity, payment) {
+      const li = document.createElement('li');
+      li.textContent = `Atas nama ${name}: ${variant} x${quantity} — Pembayaran: ${payment.toUpperCase()}`;
+      li.style.opacity = '0';
+      document.getElementById('history-list').appendChild(li);
+      setTimeout(() => (li.style.opacity = '1'), 100);
+    }
+
+    function showReceipt(name, variant, quantity, payment) {
+      const prices = {
+        "Cappuccino Classic": 20000,
+        "Cappuccino Froth": 25000,
+        "Cappuccino Caramel": 28000,
+        "Cappuccino Frappe": 30000
+      };
+      const price = prices[variant] || 0;
+      const total = price * quantity;
+      document.getElementById('receipt-content').innerHTML = `
+        <p>Nama Pembeli: <strong>${name}</strong></p>
+        <p>Varian: <strong>${variant}</strong></p>
+        <p>Jumlah: <strong>${quantity}</strong></p>
+        <p>Harga Satuan: <strong>Rp ${price.toLocaleString('id-ID')}</strong></p>
+        <p>Metode Pembayaran: <strong>${payment.toUpperCase()}</strong></p>
+        <p><strong>Total Bayar: Rp ${total.toLocaleString('id-ID')}</strong></p>
+        <p>Terima kasih telah memesan di <em>TyaPuccino</em> ☕❤️</p>
+      `;
+      document.getElementById('receipt').style.display = 'block';
+      document.getElementById('receipt').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function printPDF() {
+      html2pdf().set({
+        margin: 0.4,
+        filename: 'Struk_TyaPuccino.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+      }).from(document.getElementById('receipt')).save();
+    }
+
+    // on load
+    window.onload = () => toggleNoOrdersText();
+  </script>
+</body>
+</html>
